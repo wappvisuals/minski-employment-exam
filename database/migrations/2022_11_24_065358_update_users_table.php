@@ -14,7 +14,9 @@ class UpdateUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreignId('role_id')->constrained();
+            $table->foreignId('role_id')->after('password')->constrained();
+            $table->integer('created_by')->after('role_id')->unsigned()->index()->nullable();
+            $table->softDeletes();
         });
     }
 

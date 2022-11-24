@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Str;
+
 
 class AuthenticationController extends Controller
 {
@@ -14,6 +16,10 @@ class AuthenticationController extends Controller
         try {
             $exist = User::where('email', $request->input('email'))->first();
             if(!$exist){
+
+                $client_role = Role::where('name', 'Admin')->first();
+                $role = $client_role ? $client_role->id : 1;
+
                 $plainPassword = $request->input('password');
 
                 $user = new User;
@@ -21,7 +27,7 @@ class AuthenticationController extends Controller
                 $user->last_name = $request->input('last_name');
                 $user->email = $request->input('email');
                 $user->password = app('hash')->make($plainPassword);
-                $user->role_id = 1;
+                $user->role_id = $role;
                 $user->contact_no = $request->input('contact_no');
                 $user->birthdate = $request->input('birthdate');
                 $user->save();
@@ -61,7 +67,10 @@ class AuthenticationController extends Controller
                 return response()->json(['message' => 'Your email and/or password is incorrect.'], 401);
             }
 
-            $user = User::where('id', Auth::user()->id)->where('role_id', 1)->first();
+            $client_role = Role::where('name', 'Admin')->first();
+            $role = $client_role ? $client_role->id : 1;
+
+            $user = User::where('id', Auth::user()->id)->where('role_id', $role)->first();
 
             if($user){
                 $response = (object)[
