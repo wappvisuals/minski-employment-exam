@@ -7,7 +7,7 @@
                 <!-- Login -->
                 <div class="relative flex flex-1 flex-col items-center justify-center px-6 md:px-10 py-10 md:py-20 lg:py-0 relative bg-[#34495e]">
                     <!-- Login box -->
-                    <div class="w-4/12 bg-white p-12 rounded z-10">
+                    <div class="w-full md:w-4/12 bg-white p-6 py-8 md:p-12 rounded z-10">
                         <img alt="Vue logo" class="logo mx-auto" src="./../../assets/logo.svg" width="130" height="130" />
                         <div class="flex flex-col space-y-3 text-left mb-7 text-center">
                             <h2 class="text-xl md:text-2xl font-bold">Admin Dashboard</h2>
@@ -24,8 +24,8 @@
                                         </div>
                                         <div class="text-red-900 text-sm mt-2" v-if="$v.form.email.email.$invalid">
                                             {{ $lang.validations.invalid_email_format }}
-                                          </div>
-                                      </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="relative w-full mb-6">
                                     <label class="block text-gray-500 text-sm mb-2" for="grid-password"> Password </label>
@@ -62,6 +62,8 @@
                                     </span>
                                 </button>
                             </form>
+
+                            <p class="text-center">Don't have an account? <span class="text-primary font-bold cursor-pointer" @click="openRegistration()">Sign up now</span></p>
                         </div>
                     </div>
             
@@ -70,29 +72,35 @@
         
           </div>
     </main>
+    <RegisterView :isOpen="openRegForm" @closeRegistration="openRegForm = $event"></RegisterView>
 </template>
 
 <script>
  import { ref } from 'vue'
     import { useVuelidate } from "@vuelidate/core";
     import { required, email } from "@vuelidate/validators";
+    import RegisterView from "@/views/auth/RegisterView.vue";
     
     export default {
         setup() {
             return { 
-                $v: useVuelidate()
+                $v: useVuelidate(),
+                isRequesting: ref(false),
+                openRegForm: ref(false),
+                isUnmask: ref(false),
+                formSubmitted: ref(false),
             };
         },
         data: function() {
             return {
-                isUnmask: false,
                 form: {
                     email: "",
                     password: "",
                 },
-                isRequesting: false,
-                formSubmitted: false,
             };
+        },
+        components: {
+            RegisterView
         },
         validations: {
             form: {
@@ -112,6 +120,9 @@
                 if ($v.form.$error) {
                     return false;
                 }
+            },
+            openRegistration(){
+                this.openRegForm = true;
             },
         },
     };
