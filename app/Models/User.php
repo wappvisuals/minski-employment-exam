@@ -41,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $with = ['role'];
+
+    public function interests(){
+        return $this->hasMany(ClientInterest::class, 'id', 'user_id');
+    }
+
+    public function role(){
+        return $this->hasOne(Role::class, 'id', 'role_id');
+    }
 }
