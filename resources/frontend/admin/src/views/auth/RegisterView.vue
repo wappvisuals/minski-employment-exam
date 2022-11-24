@@ -126,6 +126,7 @@
                                     </div>
                                     <div class="flex items-center mt-2 pace-x-1">
                                       <div class="relative overflow-hidden h-2 w-full border border-gray-300 rounded">
+                                        
                                         <span :style="{width:`${passwordStrengthPerc}%`}" :class="strengthBackground" class="h-full absolute top-0"></span>
                                       </div>
                                     </div>
@@ -134,7 +135,10 @@
                                       <div class="text-red-900 text-sm mt-2" v-if="$v.form.password.required.$invalid">
                                         {{ $lang.validations.required_password }}
                                       </div>
-                                    </div>
+                                  </div>
+                                  <div class="input-errors" v-if="!$v.form.password.required.$invalid && $v.form.password.$error && formSubmitted">
+                                      <div class="text-red-900 text-sm mt-1 italic">Your password must contain atlease 1 special character, 1 number, 1 lowercase & 1 uppercase</div>
+                                  </div>
                               </div>
 
                               <div class="relative w-full md:w-2/2">
@@ -149,11 +153,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                     </svg>
                                 </div>
-                                <div class="input-errors" v-if="$v.form.confirm_password.$error && formSubmitted">
-                                    <div class="text-red-900 text-sm mt-2" v-if="$v.form.confirm_password.required.$invalid">
-                                      {{ $lang.validations.required_confirm_password }}
-                                    </div>
-                                </div>
+                                
                                 <div class="input-errors" v-if="notMatchPassword">
                                     <div class="text-red-900 text-sm mt-1">{{$lang.validations.notmatch_confirm_password}}</div>
                                 </div>
@@ -206,6 +206,9 @@
 
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css'
+
+    /* VUEX */
+    import { mapActions, mapMutations } from "vuex";
     
     export default {
             props: ['isOpen'],
@@ -213,9 +216,9 @@
               return { 
                 $v: useVuelidate(),
                 notMatchPassword: ref(false),
-                passwordStrengthPerc: 0,
-                passwordStrength: 0,
-                strengthBackground: 'bg-red-800'
+                passwordStrengthPerc: ref(0),
+                passwordStrength: ref(0),
+                strengthBackground: ref('bg-red-800')
               };
             },
             components: {
@@ -259,9 +262,9 @@
                     containsNumber: function(value) {
                       return /[0-9]/.test(value)
                     },
-                    // containsSpecial: function(value) {
-                    //   return /[#?!@$%^&*-]/.test(value)
-                    // }
+                    containsSpecial: function(value) {
+                      return /[#?!@$%^&*-]/.test(value)
+                    }
                   },
                   confirm_password: {required},
                   tc_agree: {required},
@@ -287,12 +290,32 @@
                     for (var key in this.form) {
                         formData.append(key, this.form[key])
                     }
+
+                    this.signUp(formData).then(res => {
+                      if(res.status === 200){
+                          setTimeout(() => {
+                            this.isRequesting = false;
+                            localStorage.setItem("_token", res.data.result.token);
+                            this.setToken(res.data.result.token);
+
+                            localStorage.setItem("user_data", JSON.stringify(res.data.result.user));
+                            this.setUserDetais(res.data.result.user);
+                            
+                            this.$router.push({ name: 'clients' })
+                          }, 1000);
+                      }
+                      this.isRequesting = false;
+                      this.$emit('closeRegistration', false)
+                    }).catch(err => {
+                      this.isRequesting = false;
+                    });
                 },
                 closeModal(){
                     this.$emit('closeRegistration', false)
                 },
                 checkStrength($v){
                   this.passwordStrength = 0;
+
                   if(!$v.form.password.containsUppercase.$invalid){
                     this.passwordStrength++;
                   }
@@ -302,14 +325,16 @@
                   if(!$v.form.password.containsNumber.$invalid){
                     this.passwordStrength++;
                   }
-                  // if(!$v.form.password.containsSpecial.$invalid){
-                  //   this.passwordStrength++;
-                  // }
+                  if(!$v.form.password.containsSpecial.$invalid){
+                    this.passwordStrength++;
+                  }
                   if(!$v.form.password.min.$invalid){
                     this.passwordStrength++;
                   }
-                  if($v.form.password.$model.length > 11){
-                    this.passwordStrength++;
+
+                  console.log(this.passwordStrength);
+                  if(this.passwordStrength <= 2){
+                    this.strengthBackground = "bg-red-800";
                   }
                   if(this.passwordStrength == 3){
                     this.strengthBackground = "bg-yellow-500";
@@ -320,6 +345,7 @@
                   if(this.passwordStrength == 5){
                     this.strengthBackground = "bg-green-700";
                   }
+                  console.log(this.strengthBackground);
                   this.passwordStrengthPerc = (this.passwordStrength / 5) * 100;
                   this.matchPassword($v);
                 },
@@ -329,7 +355,16 @@
                   }else{
                       this.notMatchPassword = true;
                   }
-                }
+                },
+                ...mapActions("auth", {
+                  signUp: 'SIGNUP_ACTION',
+                }),
+                ...mapMutations("user", {
+                    setUserDetais: 'SET_USER_DETAILS',
+                }),
+                ...mapMutations("auth", {
+                    setToken: 'SET_USER_TOKEN',
+                }),
             },
     }
   </script>

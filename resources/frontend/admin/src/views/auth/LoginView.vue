@@ -80,6 +80,9 @@
     import { useVuelidate } from "@vuelidate/core";
     import { required, email } from "@vuelidate/validators";
     import RegisterView from "@/views/auth/RegisterView.vue";
+
+    /* VUEX */
+    import { mapActions, mapMutations } from "vuex";
     
     export default {
         setup() {
@@ -120,10 +123,44 @@
                 if ($v.form.$error) {
                     return false;
                 }
+                
+                this.isRequesting = true;
+                let formData = new FormData();
+                for (var key in this.form) {
+                    formData.append(key, this.form[key]);
+                }
+
+                this.login(formData).then((res) => {
+                    if(res.status === 200){
+                        setTimeout(() => {
+                            localStorage.setItem("_token", res.data.result.token);
+                            this.setToken(res.data.result.token);
+
+                            localStorage.setItem("user_data", JSON.stringify(res.data.result.user));
+                            this.setUserDetais(res.data.result.user);
+
+                            this.isRequesting = false;
+                            this.$router.push({ name: 'clients' })
+                        }, 1000);
+                    }
+                })
+                .catch((err) => {
+                    this.isRequesting = false;
+                    console.log(err);
+                });
             },
             openRegistration(){
                 this.openRegForm = true;
             },
+            ...mapActions("auth", {
+                login: 'LOGIN_ACTION',
+            }),
+            ...mapMutations("user", {
+                setUserDetais: 'SET_USER_DETAILS',
+            }),
+            ...mapMutations("auth", {
+                setToken: 'SET_USER_TOKEN',
+            }),
         },
     };
 </script>
