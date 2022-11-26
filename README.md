@@ -27,6 +27,8 @@ DB_PASSWORD=
 <p>Finaly, serve:</p>
 <pre>$ php artisan serve </pre>
 
+<note>Note : I serve project with port 8000</note>
+
 <br><br>
 
 ## RUN VUE APPLICATION
@@ -44,3 +46,5 @@ VITE_APP_BASEURL=''
 
 <p>Run the application:</p>
 <pre>$ npm run dev</pre>
+
+<note>Note : VITE_API_BASEURL value should be base on the backend endpoint url</note>
