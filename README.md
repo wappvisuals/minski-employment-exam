@@ -5,7 +5,7 @@
 <p>After you cloned the project install the package dependencies by running the command:</p>
 <pre>$ composer i</pre>
 
-<p>Create and connect your database:</p>
+<p>Create and connect your database (.env file):</p>
 <pre>
 DB_DATABASE=database_name
 DB_USERNAME=root
