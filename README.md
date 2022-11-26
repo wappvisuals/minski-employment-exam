@@ -1,6 +1,13 @@
-## SETUP PROJECT
-<p>After you cloned the project install the packages:</p>
+## RUN BACKEND
+<p>After you cloned the project install the package dependencies by running the command:</p>
 <pre>$ composer i</pre>
+
+<p>Create and connect your database:</p>
+<pre>
+DB_DATABASE=database_name
+DB_USERNAME=root
+DB_PASSWORD=
+</pre>
 
 <p>Migrate the database tables:</p>
 <pre>$ php artisan migrate</pre>
@@ -8,13 +15,15 @@
 <p>Run the database seeder:</p>
 <pre>$ php artisan db:seeder</pre>
 
-## RUN BACKEND
-
-<pre>$ npm install axios</pre>
+<p>Finaly, serve:</p>
+<pre>$ php artisan serve </pre>
 
 ## RUN VUE APPLICATION
 <p>Go to vue applciation root folder:</p>
 <pre>$ cd resources/frontend/admin</pre>
 
-<p>Install Packages:</p>
+<p>Install package dependencies:</p>
 <pre>$ npm i</pre>
+
+<p>Run the application:</p>
+<pre>$ npm run dev</pre>
