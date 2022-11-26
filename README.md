@@ -18,6 +18,8 @@ DB_PASSWORD=
 <p>Finaly, serve:</p>
 <pre>$ php artisan serve </pre>
 
+<br><br>
+
 ## RUN VUE APPLICATION
 <p>Go to vue applciation root folder:</p>
 <pre>$ cd resources/frontend/admin</pre>
