@@ -10,6 +10,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import './assets/main.css'
 
 import lang from './helpers/lang';
+import date from './helpers/date';
 
 const app = createApp(App)
 
@@ -21,3 +22,4 @@ app.component('Datepicker', Datepicker);
 app.mount('#app')
 
 app.config.globalProperties.$lang = lang;
+app.config.globalProperties.$date = date;

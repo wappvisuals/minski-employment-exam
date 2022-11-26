@@ -22,3 +22,7 @@ body{
     width: 100% !important;
     display: none;
 }
+
+.main-content{
+    min-height: calc(100vh - 96px);
+}

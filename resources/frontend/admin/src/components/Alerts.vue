@@ -1,6 +1,6 @@
 <template>
     <TransitionRoot :show="hasError" as="template"> 
-            <div class="fixed py-6 z-50" style="right: 50%; transform: translate(50%);">
+            <div class="fixed py-6 z-[100]" style="right: 50%; transform: translate(50%);">
                 <template v-for="item of alerts" :key="item">
                      <TransitionChild v-if="item.type === 'danger'" as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-400" leave-from="opacity-100" leave-to="opacity-0">
                         <div class="alert flex flex-row items-center bg-red-200 p-5 rounded border-b-2 border-red-300 w-96 mb-3">

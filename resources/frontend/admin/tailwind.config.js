@@ -19,12 +19,12 @@ module.exports = {
           }
         },
         '.btn-primary': {
-          backgroundColor: '#41b883',
+          backgroundColor: '#194bfb',
           color: '#fff',
           borderWidth: '2px',
-          borderColor: '#41b883',
+          borderColor: '#194bfb',
           '&:hover': {
-            backgroundColor: '#17b16d'
+            backgroundColor: '#0437ed'
           },
           '&:disabled':{
             cursor: 'not-allowed'
@@ -68,11 +68,11 @@ module.exports = {
           color: '#1D222D',
           borderRadius: '5px',
           '&:hover': {
-            borderColor: '#41b883 !important',
+            borderColor: '#194bfb !important',
             borderWidth: '1px',
           },
           '&:focus': {
-            borderColor: '#41b883 !important',
+            borderColor: '#194bfb !important',
             borderWidth: '1px',
             outline: 'none',
           },
@@ -84,7 +84,7 @@ module.exports = {
 
       const text = {
         '.text-primary': {
-          color: '#41b883'
+          color: '#194bfb'
         },
         '.text-secondary': {
           color: '#04243C'
@@ -93,7 +93,7 @@ module.exports = {
 
       const background = {
         '.bg-primary': {
-          backgroundColor: '#41b883'
+          backgroundColor: '#194bfb'
         },
         '.bg-primary-100': {
           backgroundColor: 'rgba(151, 80, 48, 0.1)'

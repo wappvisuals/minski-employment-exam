@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\ClientInterest;
 use App\Models\Role;
 
 class ClientController extends Controller
@@ -27,7 +28,7 @@ class ClientController extends Controller
 
             $data = User::where('created_by', Auth::user()->id)->where( function($q) use ($request) {
 
-            })->orderBy($sort, $sort_dirc)->paginate($limit);
+            })->with(['interests'])->orderBy($sort, $sort_dirc)->paginate($limit);
 
             $response = (object)[
                 "success" => true,
@@ -74,11 +75,21 @@ class ClientController extends Controller
                 $user->password = app('hash')->make($plainPassword);
                 $user->role_id = $role;
                 $user->contact_no = $request->input('contact_no');
-                $user->birthdate = $request->input('birthdate');
+                if($request->input('birthdate')){
+                    $user->birthdate = date('Y-m-d', strtotime($request->input('birthdate')));
+                }
                 $user->created_by = Auth::user()->id;
                 $user->save();
 
                 if($user){
+
+                    foreach ($request->interest as $interest) {
+                        ClientInterest::create([
+                            'user_id' => $user->id,
+                            'interest_id' => $interest,
+                        ]);
+                    }
+
                     $response = (object)[
                         "success" => true,
                         "result" => [
@@ -140,24 +151,47 @@ class ClientController extends Controller
 
             $user = User::where('id', $id)->where('role_id', $role)->first();
             if($user){
-                
-                $user->first_name = $request->input('first_name');
-                $user->last_name = $request->input('last_name');
-                $user->email = $request->input('email');
-                $user->contact_no = $request->input('contact_no');
-                $user->birthdate = $request->input('birthdate');
-                $user->save();
+                $exist = User::where('email', $request->input('email'))->where('id', '!=', $user->id)->first();
+                if(!$exist){
+                    $user->first_name = $request->input('first_name');
+                    $user->last_name = $request->input('last_name');
+                    $user->email = $request->input('email');
+                    $user->contact_no = $request->input('contact_no');
+                    if($request->input('birthdate')){
+                        $user->birthdate = date('Y-m-d', strtotime($request->input('birthdate')));
+                    }
+                    $user->save();
 
-                if($user){
-                    $response = (object)[
-                        "success" => true,
-                        "result" => [
-                            "user" => $user,
-                        ],
-                        "message" => 'Client data has been successfully updated',
-                    ];
+                    if($user){
+
+                        ClientInterest::where('user_id', $user->id)->each(function ($item, $key) {
+                            $item->delete();
+                        });
+
+                        if($request->interest){
+                            foreach ($request->interest as $interest) {
+                                ClientInterest::create([
+                                    'user_id' => $user->id,
+                                    'interest_id' => $interest,
+                                ]);
+                            }
+                        }
+
+                        $response = (object)[
+                            "success" => true,
+                            "result" => [
+                                "user" => $user,
+                            ],
+                            "message" => 'Client data has been successfully updated',
+                        ];
+                    }else{
+                        return response()->json(['message' => 'Something went wrong. Try again later!'], 409);
+                    }
                 }else{
-                    return response()->json(['message' => 'Something went wrong. Try again later!'], 409);
+                    $response = (object)[
+                        "message" => 'Provided email address is already exist.',
+                    ];
+                    return response()->json($response, 409);
                 }
                 
             }else{
@@ -202,6 +236,7 @@ class ClientController extends Controller
                     "success" => false,
                     "message" => "Can't find the client you are deleting. Please try again!"
                 ];
+                $error_code = 201;
             }
             return response()->json($response, $error_code);
         }catch (\Exception $e) {

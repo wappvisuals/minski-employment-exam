@@ -8,6 +8,8 @@ const lang = {
         required_first_name : 'First Name field is required',
         required_last_name : 'Last Name field is required',
         required_terms : 'You must agree to Terms of Service',
+        required_contact_no : 'Contact No. field is required',
+        required_birthday : 'Birthdate field is required',
     }
 
 }

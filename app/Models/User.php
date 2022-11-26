@@ -54,7 +54,7 @@ class User extends Authenticatable implements JWTSubject
     protected $with = ['role'];
 
     public function interests(){
-        return $this->hasMany(ClientInterest::class, 'id', 'user_id');
+        return $this->hasMany(ClientInterest::class, 'user_id', 'id');
     }
 
     public function role(){

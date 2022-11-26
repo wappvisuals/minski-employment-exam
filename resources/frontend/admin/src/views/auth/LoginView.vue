@@ -5,10 +5,10 @@
             <!-- Container -->
             <div class="flex flex-row w-full">
                 <!-- Login -->
-                <div class="relative flex flex-1 flex-col items-center justify-center px-6 md:px-10 py-10 md:py-20 lg:py-0 relative bg-[#34495e]">
+                <div class="relative flex flex-1 flex-col items-center justify-center px-6 md:px-10 py-10 md:py-20 lg:py-0 relative bg-[#232b3a]">
                     <!-- Login box -->
                     <div class="w-full md:w-4/12 bg-white p-6 py-8 md:p-12 rounded z-10">
-                        <img alt="Vue logo" class="logo mx-auto" src="./../../assets/logo.svg" width="130" height="130" />
+                        <img alt="Vue logo" class="logo mx-auto mb-4" src="./../../assets/logo-1.svg" width="90" height="90" />
                         <div class="flex flex-col space-y-3 text-left mb-7 text-center">
                             <h2 class="text-xl md:text-2xl font-bold">Admin Dashboard</h2>
                             <p class="text-gray-500 fs-16">Welcome! Please login to get started.</p>

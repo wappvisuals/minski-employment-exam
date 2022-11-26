@@ -13,6 +13,8 @@ class ClientInterest extends Model
 
     protected $with= ['interest'];
 
+    protected $table = 'client_interests';
+
     public function client(){
         return $this->belongsTo(User::class, 'user_id', 'id');
     }

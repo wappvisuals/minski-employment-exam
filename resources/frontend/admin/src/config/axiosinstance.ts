@@ -32,12 +32,13 @@ axiosinstance.interceptors.request.use(
 axiosinstance.interceptors.response.use(
     function(response){
         // Do something with response data
+        console.log('response',response)
         let res = {
             data: response.data,
             status: response.status,
             statusText: response.statusText
         }
-        if(response.config.method === 'post'){
+        if(response.config.method === 'post' || response.config.method === 'delete' || response.config.method === 'put'){
             let type = 'danger';
             if(res.status === 200){
                 type = 'success';
