@@ -16,7 +16,7 @@ DB_PASSWORD=
 <pre>$ php artisan migrate</pre>
 
 <p>Run the database seeder:</p>
-<pre>$ php artisan db:seeder</pre>
+<pre>$ php artisan db:seed</pre>
 
 <p>Finaly, serve:</p>
 <pre>$ php artisan serve </pre>
