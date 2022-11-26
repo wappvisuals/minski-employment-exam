@@ -168,6 +168,9 @@ export default {
             })
         },
         created(){
+            if(!this.client){
+                this.$router.push({ name: 'clients' });
+            }
             this._getInterest()
         },
         methods: {
