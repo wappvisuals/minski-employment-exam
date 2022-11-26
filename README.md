@@ -2,8 +2,14 @@
 - Php 7.4.*
 
 ## RUN BACKEND
-<p>After you cloned the project install the package dependencies by running the command:</p>
-<pre>$ composer i</pre>
+<p>After you cloned the project install the dependencies by running the command:</p>
+<pre>
+$ composer i
+$ php artisan key:generate
+$ php composer require php-open-source-saver/jwt-auth
+$ php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+$ php artisan jwt:secret
+</pre>
 
 <p>Create and connect your database (.env file):</p>
 <pre>
@@ -29,6 +35,12 @@ DB_PASSWORD=
 
 <p>Install package dependencies:</p>
 <pre>$ npm i</pre>
+
+<p>Inside the resources/frontend/admin create a .env file with the following content.</p>
+<pre>
+VITE_API_BASEURL=http://127.0.0.1:8000
+VITE_APP_BASEURL=''
+</pre>
 
 <p>Run the application:</p>
 <pre>$ npm run dev</pre>
