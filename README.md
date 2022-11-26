@@ -6,7 +6,7 @@
 <pre>
 $ composer i
 $ php artisan key:generate
-$ php composer require php-open-source-saver/jwt-auth
+$ php composer require php-open-source-saver/jwt-auth (optional)
 $ php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
 $ php artisan jwt:secret
 </pre>
