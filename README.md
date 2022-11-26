@@ -1,3 +1,6 @@
+## REQUIREMENTS
+- Php 7.4.*
+
 ## RUN BACKEND
 <p>After you cloned the project install the package dependencies by running the command:</p>
 <pre>$ composer i</pre>
